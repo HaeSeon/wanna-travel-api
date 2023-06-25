@@ -5,13 +5,12 @@ import {
   Body,
   Request,
   BadRequestException,
-  UseGuards,
 } from '@nestjs/common';
 import { UserRepository } from 'src/db/repository/user.repository';
 import { UserCreateBody } from 'src/user/user.model';
 import { LoginBody, LoginResponse } from './auth.model';
 import { AuthService } from './auth.service';
-import { AuthGuard } from './auth.guard';
+import { Public } from './decorators/public.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -20,11 +19,13 @@ export class AuthController {
     private authService: AuthService,
   ) {}
 
+  @Public()
   @Post('login')
   async login(@Body() body: LoginBody): Promise<LoginResponse> {
     return this.authService.login(body);
   }
 
+  @Public()
   @Post('signup')
   async SignUp(@Body() body: UserCreateBody) {
     const isUser = await this.userRepository.exist({
@@ -42,7 +43,6 @@ export class AuthController {
     });
   }
 
-  @UseGuards(AuthGuard)
   @Get('profile')
   getProfile(@Request() req) {
     return req.user;
