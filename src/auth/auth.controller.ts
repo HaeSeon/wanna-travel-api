@@ -1,12 +1,31 @@
-import { Controller, Post, Body, BadRequestException } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Request,
+  BadRequestException,
+  UseGuards,
+} from '@nestjs/common';
 import { UserRepository } from 'src/db/repository/user.repository';
 import { UserCreateBody } from 'src/user/user.model';
+import { LoginBody, LoginResponse } from './auth.model';
+import { AuthService } from './auth.service';
+import { AuthGuard } from './auth.guard';
 
-@Controller('/auth')
+@Controller('auth')
 export class AuthController {
-  constructor(private userRepository: UserRepository) {}
+  constructor(
+    private userRepository: UserRepository,
+    private authService: AuthService,
+  ) {}
 
-  @Post('/signup')
+  @Post('login')
+  async login(@Body() body: LoginBody): Promise<LoginResponse> {
+    return this.authService.login(body);
+  }
+
+  @Post('signup')
   async SignUp(@Body() body: UserCreateBody) {
     const isUser = await this.userRepository.exist({
       where: {
@@ -21,5 +40,11 @@ export class AuthController {
       userName: body.userName,
       password: body.password,
     });
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('profile')
+  getProfile(@Request() req) {
+    return req.user;
   }
 }
