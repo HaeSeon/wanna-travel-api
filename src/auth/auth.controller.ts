@@ -2,7 +2,7 @@ import { Controller, Post, Body, BadRequestException } from '@nestjs/common';
 import { UserRepository } from 'src/db/repository/user.repository';
 import { UserCreateBody } from 'src/user/user.model';
 
-@Controller('auth')
+@Controller('/auth')
 export class AuthController {
   constructor(private userRepository: UserRepository) {}
 
