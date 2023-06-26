@@ -5,8 +5,6 @@ import { AuthModule } from './auth/auth.module';
 import { DbModule } from './db/db.module';
 import { UserModule } from './user/user.module';
 import { ConfigModule } from '@nestjs/config';
-import { AuthGuard } from './auth/auth.guard';
-import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -19,12 +17,6 @@ import { APP_GUARD } from '@nestjs/core';
     }),
   ],
   controllers: [AppController],
-  providers: [
-    AppService,
-    {
-      provide: APP_GUARD,
-      useClass: AuthGuard,
-    },
-  ],
+  providers: [AppService],
 })
 export class AppModule {}
