@@ -5,6 +5,8 @@ import { AuthModule } from './auth/auth.module';
 import { DbModule } from './db/db.module';
 import { UserModule } from './user/user.module';
 import { ConfigModule } from '@nestjs/config';
+import { DestinationModule } from './destination/destination.module';
+import { ChatgptModule } from './chatgpt/chatgpt.module';
 
 @Module({
   imports: [
@@ -15,6 +17,8 @@ import { ConfigModule } from '@nestjs/config';
       cache: true,
       isGlobal: true,
     }),
+    DestinationModule,
+    ChatgptModule,
   ],
   controllers: [AppController],
   providers: [AppService],
